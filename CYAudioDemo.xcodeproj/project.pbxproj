@@ -1,0 +1,343 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		BF2C0DA916BE7953002FD6E3 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DA816BE7953002FD6E3 /* UIKit.framework */; };
+		BF2C0DAB16BE7953002FD6E3 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DAA16BE7953002FD6E3 /* Foundation.framework */; };
+		BF2C0DAD16BE7953002FD6E3 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DAC16BE7953002FD6E3 /* CoreGraphics.framework */; };
+		BF2C0DB316BE7953002FD6E3 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = BF2C0DB116BE7953002FD6E3 /* InfoPlist.strings */; };
+		BF2C0DB516BE7953002FD6E3 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C0DB416BE7953002FD6E3 /* main.m */; };
+		BF2C0DB916BE7953002FD6E3 /* CYAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C0DB816BE7953002FD6E3 /* CYAppDelegate.m */; };
+		BF2C0DBB16BE7953002FD6E3 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C0DBA16BE7953002FD6E3 /* Default.png */; };
+		BF2C0DBD16BE7953002FD6E3 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C0DBC16BE7953002FD6E3 /* Default@2x.png */; };
+		BF2C0DBF16BE7953002FD6E3 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BF2C0DBE16BE7953002FD6E3 /* Default-568h@2x.png */; };
+		BF2C0DC216BE7953002FD6E3 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BF2C0DC016BE7953002FD6E3 /* MainStoryboard.storyboard */; };
+		BF2C0DC516BE7953002FD6E3 /* CYViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C0DC416BE7953002FD6E3 /* CYViewController.m */; };
+		BF2C0DCD16BE7964002FD6E3 /* CYAudioStreamer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C0DCC16BE7964002FD6E3 /* CYAudioStreamer.m */; };
+		BF2C0DD016BE7994002FD6E3 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DCE16BE7994002FD6E3 /* MediaPlayer.framework */; };
+		BF2C0DD316BE799A002FD6E3 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DD216BE799A002FD6E3 /* AVFoundation.framework */; };
+		BF2C0DD616BE9999002FD6E3 /* CYAudioQueuePlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = BF2C0DD516BE9999002FD6E3 /* CYAudioQueuePlayer.m */; };
+		BF2C0DD816BEC9E7002FD6E3 /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DD716BEC9E7002FD6E3 /* CoreMedia.framework */; };
+		BF2C0DDA16BECB93002FD6E3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */; };
+		BF83F71A16BECD7D0078BEDA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		BF2C0DA516BE7953002FD6E3 /* CYAudioDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CYAudioDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		BF2C0DA816BE7953002FD6E3 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		BF2C0DAA16BE7953002FD6E3 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		BF2C0DAC16BE7953002FD6E3 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		BF2C0DB016BE7953002FD6E3 /* CYAudioDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "CYAudioDemo-Info.plist"; sourceTree = "<group>"; };
+		BF2C0DB216BE7953002FD6E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		BF2C0DB416BE7953002FD6E3 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		BF2C0DB616BE7953002FD6E3 /* CYAudioDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CYAudioDemo-Prefix.pch"; sourceTree = "<group>"; };
+		BF2C0DB716BE7953002FD6E3 /* CYAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYAppDelegate.h; sourceTree = "<group>"; };
+		BF2C0DB816BE7953002FD6E3 /* CYAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYAppDelegate.m; sourceTree = "<group>"; };
+		BF2C0DBA16BE7953002FD6E3 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		BF2C0DBC16BE7953002FD6E3 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		BF2C0DBE16BE7953002FD6E3 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		BF2C0DC116BE7953002FD6E3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
+		BF2C0DC316BE7953002FD6E3 /* CYViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CYViewController.h; sourceTree = "<group>"; };
+		BF2C0DC416BE7953002FD6E3 /* CYViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CYViewController.m; sourceTree = "<group>"; };
+		BF2C0DCB16BE7964002FD6E3 /* CYAudioStreamer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYAudioStreamer.h; sourceTree = "<group>"; };
+		BF2C0DCC16BE7964002FD6E3 /* CYAudioStreamer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYAudioStreamer.m; sourceTree = "<group>"; };
+		BF2C0DCE16BE7994002FD6E3 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
+		BF2C0DD216BE799A002FD6E3 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		BF2C0DD416BE9999002FD6E3 /* CYAudioQueuePlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYAudioQueuePlayer.h; sourceTree = "<group>"; };
+		BF2C0DD516BE9999002FD6E3 /* CYAudioQueuePlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYAudioQueuePlayer.m; sourceTree = "<group>"; };
+		BF2C0DD716BEC9E7002FD6E3 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
+		BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
+		BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BF2C0DA216BE7953002FD6E3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF83F71A16BECD7D0078BEDA /* AudioToolbox.framework in Frameworks */,
+				BF2C0DDA16BECB93002FD6E3 /* CoreAudio.framework in Frameworks */,
+				BF2C0DD816BEC9E7002FD6E3 /* CoreMedia.framework in Frameworks */,
+				BF2C0DD316BE799A002FD6E3 /* AVFoundation.framework in Frameworks */,
+				BF2C0DD016BE7994002FD6E3 /* MediaPlayer.framework in Frameworks */,
+				BF2C0DA916BE7953002FD6E3 /* UIKit.framework in Frameworks */,
+				BF2C0DAB16BE7953002FD6E3 /* Foundation.framework in Frameworks */,
+				BF2C0DAD16BE7953002FD6E3 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		BF2C0D9C16BE7953002FD6E3 = {
+			isa = PBXGroup;
+			children = (
+				BF2C0DAE16BE7953002FD6E3 /* CYAudioDemo */,
+				BF2C0DA716BE7953002FD6E3 /* Frameworks */,
+				BF2C0DA616BE7953002FD6E3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BF2C0DA616BE7953002FD6E3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				BF2C0DA516BE7953002FD6E3 /* CYAudioDemo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		BF2C0DA716BE7953002FD6E3 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */,
+				BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */,
+				BF2C0DD716BEC9E7002FD6E3 /* CoreMedia.framework */,
+				BF2C0DD216BE799A002FD6E3 /* AVFoundation.framework */,
+				BF2C0DCE16BE7994002FD6E3 /* MediaPlayer.framework */,
+				BF2C0DA816BE7953002FD6E3 /* UIKit.framework */,
+				BF2C0DAA16BE7953002FD6E3 /* Foundation.framework */,
+				BF2C0DAC16BE7953002FD6E3 /* CoreGraphics.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		BF2C0DAE16BE7953002FD6E3 /* CYAudioDemo */ = {
+			isa = PBXGroup;
+			children = (
+				BF2C0DB716BE7953002FD6E3 /* CYAppDelegate.h */,
+				BF2C0DB816BE7953002FD6E3 /* CYAppDelegate.m */,
+				BF2C0DC016BE7953002FD6E3 /* MainStoryboard.storyboard */,
+				BF2C0DC316BE7953002FD6E3 /* CYViewController.h */,
+				BF2C0DC416BE7953002FD6E3 /* CYViewController.m */,
+				BF2C0DD416BE9999002FD6E3 /* CYAudioQueuePlayer.h */,
+				BF2C0DD516BE9999002FD6E3 /* CYAudioQueuePlayer.m */,
+				BF2C0DCB16BE7964002FD6E3 /* CYAudioStreamer.h */,
+				BF2C0DCC16BE7964002FD6E3 /* CYAudioStreamer.m */,
+				BF2C0DAF16BE7953002FD6E3 /* Supporting Files */,
+			);
+			path = CYAudioDemo;
+			sourceTree = "<group>";
+		};
+		BF2C0DAF16BE7953002FD6E3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				BF2C0DB016BE7953002FD6E3 /* CYAudioDemo-Info.plist */,
+				BF2C0DB116BE7953002FD6E3 /* InfoPlist.strings */,
+				BF2C0DB416BE7953002FD6E3 /* main.m */,
+				BF2C0DB616BE7953002FD6E3 /* CYAudioDemo-Prefix.pch */,
+				BF2C0DBA16BE7953002FD6E3 /* Default.png */,
+				BF2C0DBC16BE7953002FD6E3 /* Default@2x.png */,
+				BF2C0DBE16BE7953002FD6E3 /* Default-568h@2x.png */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		BF2C0DA416BE7953002FD6E3 /* CYAudioDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = BF2C0DC816BE7953002FD6E3 /* Build configuration list for PBXNativeTarget "CYAudioDemo" */;
+			buildPhases = (
+				BF2C0DA116BE7953002FD6E3 /* Sources */,
+				BF2C0DA216BE7953002FD6E3 /* Frameworks */,
+				BF2C0DA316BE7953002FD6E3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = CYAudioDemo;
+			productName = CYAudioDemo;
+			productReference = BF2C0DA516BE7953002FD6E3 /* CYAudioDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		BF2C0D9D16BE7953002FD6E3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = CY;
+				LastUpgradeCheck = 0460;
+				ORGANIZATIONNAME = Lancy;
+			};
+			buildConfigurationList = BF2C0DA016BE7953002FD6E3 /* Build configuration list for PBXProject "CYAudioDemo" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = BF2C0D9C16BE7953002FD6E3;
+			productRefGroup = BF2C0DA616BE7953002FD6E3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				BF2C0DA416BE7953002FD6E3 /* CYAudioDemo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		BF2C0DA316BE7953002FD6E3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF2C0DB316BE7953002FD6E3 /* InfoPlist.strings in Resources */,
+				BF2C0DBB16BE7953002FD6E3 /* Default.png in Resources */,
+				BF2C0DBD16BE7953002FD6E3 /* Default@2x.png in Resources */,
+				BF2C0DBF16BE7953002FD6E3 /* Default-568h@2x.png in Resources */,
+				BF2C0DC216BE7953002FD6E3 /* MainStoryboard.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		BF2C0DA116BE7953002FD6E3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BF2C0DB516BE7953002FD6E3 /* main.m in Sources */,
+				BF2C0DB916BE7953002FD6E3 /* CYAppDelegate.m in Sources */,
+				BF2C0DC516BE7953002FD6E3 /* CYViewController.m in Sources */,
+				BF2C0DCD16BE7964002FD6E3 /* CYAudioStreamer.m in Sources */,
+				BF2C0DD616BE9999002FD6E3 /* CYAudioQueuePlayer.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		BF2C0DB116BE7953002FD6E3 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF2C0DB216BE7953002FD6E3 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		BF2C0DC016BE7953002FD6E3 /* MainStoryboard.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				BF2C0DC116BE7953002FD6E3 /* en */,
+			);
+			name = MainStoryboard.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		BF2C0DC616BE7953002FD6E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		BF2C0DC716BE7953002FD6E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.1;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		BF2C0DC916BE7953002FD6E3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CYAudioDemo/CYAudioDemo-Prefix.pch";
+				INFOPLIST_FILE = "CYAudioDemo/CYAudioDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		BF2C0DCA16BE7953002FD6E3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "CYAudioDemo/CYAudioDemo-Prefix.pch";
+				INFOPLIST_FILE = "CYAudioDemo/CYAudioDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				VALID_ARCHS = "armv7 armv7s";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		BF2C0DA016BE7953002FD6E3 /* Build configuration list for PBXProject "CYAudioDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2C0DC616BE7953002FD6E3 /* Debug */,
+				BF2C0DC716BE7953002FD6E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		BF2C0DC816BE7953002FD6E3 /* Build configuration list for PBXNativeTarget "CYAudioDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				BF2C0DC916BE7953002FD6E3 /* Debug */,
+				BF2C0DCA16BE7953002FD6E3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = BF2C0D9D16BE7953002FD6E3 /* Project object */;
+}
