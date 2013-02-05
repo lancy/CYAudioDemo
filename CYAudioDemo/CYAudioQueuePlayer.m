@@ -156,6 +156,12 @@ cleanup:
 {
     _state = AS_BUFFERING;
     
+    CMItemCount numSamples = CMSampleBufferGetNumSamples(sample);
+    
+    if (!sample || (numSamples == 0)) {
+        return;
+    }
+    
     Boolean isBufferDataReady = CMSampleBufferDataIsReady(sample);
     
     if (!isBufferDataReady) {

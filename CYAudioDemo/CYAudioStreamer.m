@@ -24,8 +24,7 @@
         NSError *error = nil;
         _assertReader = [[AVAssetReader alloc] initWithAsset:urlAssert error:&error];
         
-//        [_assertReader setTimeRange:CMTimeRangeMake(kCMTimeZero, urlAssert.duration)];
-        [_assertReader setTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeMake(1, 1))];
+        [_assertReader setTimeRange:CMTimeRangeMake(kCMTimeZero, urlAssert.duration)];
         
         AVAssetTrack* track = [urlAssert.tracks objectAtIndex:0];
         _audioStreamBasicDescription = [self getTrackNativeSettings:track];
