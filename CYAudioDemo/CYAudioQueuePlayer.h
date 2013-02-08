@@ -14,7 +14,7 @@
 @interface CYAudioQueuePlayer : NSObject
 
 
-- (void)handleSampleBuffer:(CMSampleBufferRef)sample;
+- (void)handlePacketData:(NSData *)packetData;
 - (void)setupQueueWithAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
 @end

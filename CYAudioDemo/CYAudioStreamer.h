@@ -15,9 +15,7 @@
 
 @protocol CYAudioStreamerDelegate <NSObject>
 @optional
-- (void)streamer:(CYAudioStreamer *)streamer didGetSampleBuffer:(CMSampleBufferRef)sampleBuffer;
-
-
+- (void)streamer:(CYAudioStreamer *)streamer didGetPacketData:(NSData *)packetData;
 
 @end
 

@@ -6,6 +6,8 @@
 //  Copyright (c) 2013 Lancy. All rights reserved.
 //
 
+#define PACKET_CAPACITY 2048
+
 #import "CYAudioStreamer.h"
 
 @interface CYAudioStreamer()
@@ -20,10 +22,8 @@
 {
     if (self = [super init]) {
         [self setDelegate:delegate];
-        
         NSError *error = nil;
         _assertReader = [[AVAssetReader alloc] initWithAsset:urlAssert error:&error];
-        
         [_assertReader setTimeRange:CMTimeRangeMake(kCMTimeZero, urlAssert.duration)];
         
         AVAssetTrack* track = [urlAssert.tracks objectAtIndex:0];
@@ -31,6 +31,8 @@
         _assertReaderOutput = [AVAssetReaderTrackOutput assetReaderTrackOutputWithTrack:track
                                                                        outputSettings:nil];
         [_assertReader addOutput:_assertReaderOutput];
+        [self.assertReader startReading];
+
     }
     
     return self;
@@ -38,18 +40,73 @@
 
 - (void)startStreaming
 {
-    [self.assertReader startReading];
     
-    dispatch_queue_t backGround = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
-    dispatch_async(backGround, ^{
-        CMSampleBufferRef sample;
-        while ((sample = [self.assertReaderOutput copyNextSampleBuffer])) {
-            if ([self.delegate respondsToSelector:@selector(streamer:didGetSampleBuffer:)]) {
-                [self.delegate streamer:self didGetSampleBuffer:sample];
+    dispatch_queue_t streamingQueue =  dispatch_queue_create("StreamingQueue", nil);
+    dispatch_async(streamingQueue, ^{   
+        
+        CMSampleBufferRef sampleBuffer;
+        while ((sampleBuffer = [self.assertReaderOutput copyNextSampleBuffer])) {
+            
+            if (sampleBuffer) {
+                
+                CMTime durationTime = CMSampleBufferGetDuration(sampleBuffer);
+                if (CMTimeGetSeconds(durationTime) == 0.0) {
+                    break;
+                }
+                
+                CMBlockBufferRef blockBuffer;
+                AudioBufferList audioBufferList;
+                CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer, NULL, &audioBufferList, sizeof(AudioBufferList), NULL, NULL, 0, &blockBuffer);
+                CFRelease(blockBuffer);
+                
+                for (int i = 0; i < audioBufferList.mNumberBuffers; i++) {
+                    AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
+                    
+                    // 何回に分けてパケットを送るか計算
+                    // PACKET_CAPACITYは一度にBluetoothで送るパケットサイズ
+                    int mod = audioBuffer.mDataByteSize % PACKET_CAPACITY;
+                    int numberOfPacket;
+                    if (mod != 0) {
+                        numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY + 1;
+                    } else {
+                        numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY;
+                    }
+                    NSLog(@"mDataByteSize = %ld", audioBuffer.mDataByteSize);
+                    NSLog(@"numberOfPacket = %d", numberOfPacket);
+                    
+                    // AudioBufferのデータを格納しているポインタ
+                    void *audioBufferPointer = audioBuffer.mData;
+                    
+                    // 残りデータサイズ
+                    int remainedDataSize = audioBuffer.mDataByteSize;
+                    for (int i = 0; i < numberOfPacket; i++) {
+                        int sendDataSize;
+                        if (remainedDataSize < PACKET_CAPACITY) {
+                            sendDataSize = remainedDataSize;
+                        } else {
+                            sendDataSize = PACKET_CAPACITY;
+                        }
+                        
+                        NSData *data = [NSMutableData dataWithBytes:audioBufferPointer length:sendDataSize];
+                        
+                        if ([self.delegate respondsToSelector:@selector(streamer:didGetPacketData:)]) {
+                            [self.delegate streamer:self didGetPacketData:data];
+                        }
+                                                
+                        // 残りデータサイズの更新
+                        remainedDataSize -= sendDataSize;
+                        
+                        // ポインタを先に進める
+                        if (i < numberOfPacket - 1) {
+                            audioBufferPointer += PACKET_CAPACITY;
+                        }
+                    }
+                }
             }
-        }
-        NSLog(@"No sample can read.");
+        }        
     });
+    
+    dispatch_release(streamingQueue);
 }
 
 

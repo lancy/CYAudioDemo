@@ -152,6 +152,36 @@ cleanup:
 
 #pragma mark - buffer handler
 
+- (void)handlePacketData:(NSData *)packetData
+{
+    _state = AS_BUFFERING;
+    UInt32 packetSize = [packetData length];
+    void *packetDataPointer = alloca(packetSize);
+
+    
+    [packetData getBytes:packetDataPointer length:packetSize];
+    
+    
+//    [packetData getBytes:packetDataPointer length:packetDescription.mDataByteSize];
+    
+    
+    AudioQueueBufferRef fillBuf = _audioQueueBuffers[_fillBufferIndex];
+    memcpy((char*)fillBuf->mAudioData + _bytesFilled,
+           (const char*)(packetDataPointer), packetSize);
+    
+    
+    
+    // fill out packet description
+    _packetDescs[_packetsFilled].mDataByteSize = packetSize;
+    _packetDescs[_packetsFilled].mStartOffset = _bytesFilled;
+    
+    
+    _bytesFilled += packetSize;
+    _packetsFilled += 1;
+    
+    [self enqueueBuffer];  
+}
+
 - (void)handleSampleBuffer:(CMSampleBufferRef)sample
 {
     _state = AS_BUFFERING;

@@ -31,7 +31,10 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     
+    
+    
     [self initGameKit];
+    [self beginStreaming];
 }
 
 - (void)initGameKit
@@ -60,7 +63,6 @@
     AVURLAsset *songAsset = [AVURLAsset assetWithURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL]];
     
     self.audioStreamer = [[CYAudioStreamer alloc] initWithUrlAssert:songAsset delegate:self];
-    [self.audioStreamer startStreaming];
     
     AudioStreamBasicDescription audioStreamBasicDescription = [self.audioStreamer audioStreamBasicDescription];
     NSData *ASBDData = [NSData dataWithBytes:&audioStreamBasicDescription length:sizeof(audioStreamBasicDescription)];
@@ -69,19 +71,24 @@
     
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:beginSinal];
     
-    [self.session sendData:data toPeers:self.peersConnected withDataMode:GKSendDataReliable error:nil];
+//    [self.session sendData:data toPeers:self.peersConnected withDataMode:GKSendDataReliable error:nil];
+    
+    NSDictionary *signal = [NSKeyedUnarchiver  unarchiveObjectWithData:data];
 
+    AudioStreamBasicDescription temp;
+    [[signal objectForKey:@"audioStreamBasicDescription"] getBytes:&temp length:[[signal objectForKey:@"audioStreamBasicDescription"] length]];
+
+    self.queuePlayer = [[CYAudioQueuePlayer alloc] init];
+    [self.queuePlayer setupQueueWithAudioStreamBasicDescription:temp];
+
+    [self.audioStreamer startStreaming];
 }
 
-- (void)streamer:(CYAudioStreamer *)streamer didGetSampleBuffer:(CMSampleBufferRef)sampleBuffer
+- (void)streamer:(CYAudioStreamer *)streamer didGetPacketData:(NSData *)packetData
 {
-    NSData *sampleData = [NSData dataWithBytes:&sampleBuffer length:sizeof(sampleBuffer)];
-    NSDictionary *sampleSinal = @{@"sampleBuffer": sampleData};
-    
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:sampleSinal];
-    
-    [self.session sendData:data toPeers:self.peersConnected withDataMode:GKSendDataReliable error:nil];
+    [self.queuePlayer handlePacketData:packetData];
 }
+
 
 #pragma mark - GKPeerPickerControllerDelegate
 
@@ -103,19 +110,6 @@
 // Function to receive data when sent from peer
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
 {
-    NSDictionary *signal = [NSKeyedUnarchiver  unarchiveObjectWithData:data];
-    if ([signal objectForKey:@"sampleBuffer"]) {
-        CMSampleBufferRef sampleBuffer;
-        [[signal objectForKey:@"sampleBuffer"] getBytes:&sampleBuffer];
-        [self.queuePlayer handleSampleBuffer:sampleBuffer];
-    } else if ([signal objectForKey:@"audioStreamBasicDescription"]) {
-        AudioStreamBasicDescription audioStreamBasicDescription;
-        [[signal objectForKey:@"audioStreamBasicDescription"] getBytes:&audioStreamBasicDescription];
-        
-        self.queuePlayer = [[CYAudioQueuePlayer alloc] init];
-        [self.queuePlayer setupQueueWithAudioStreamBasicDescription:audioStreamBasicDescription];
-    }
-    
 }
 
 #pragma mark - GKSessionDelegate
@@ -131,13 +125,19 @@
         [[self.view viewWithTag:12] removeFromSuperview];
         
         UIButton *sendSongBtn = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [sendSongBtn addTarget:self action:@selector(startStreamingAudio:) forControlEvents:UIControlEventTouchUpInside];
+        [sendSongBtn addTarget:self action:@selector(beginStreaming) forControlEvents:UIControlEventTouchUpInside];
         [sendSongBtn setTitle:@"Start Streaming" forState:UIControlStateNormal];
         sendSongBtn.frame = CGRectMake(20, 100, 280, 30);
         sendSongBtn.tag = 12;
         [self.view addSubview:sendSongBtn];
     }
 }
+
+- (void)tapConnectButton:(id)sender
+{
+    [self.peerPickerController show];
+}
+
 
 
 @end
