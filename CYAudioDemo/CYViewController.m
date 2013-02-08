@@ -29,12 +29,7 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
-    
-    
-    
-    
     [self initGameKit];
-    [self beginStreaming];
 }
 
 - (void)initGameKit
@@ -64,28 +59,27 @@
     
     self.audioStreamer = [[CYAudioStreamer alloc] initWithUrlAssert:songAsset delegate:self];
     
+
+    
     AudioStreamBasicDescription audioStreamBasicDescription = [self.audioStreamer audioStreamBasicDescription];
     NSData *ASBDData = [NSData dataWithBytes:&audioStreamBasicDescription length:sizeof(audioStreamBasicDescription)];
+    NSDictionary *beginSignal = @{@"audioStreamBasicDescription": ASBDData};
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:beginSignal];
     
-    NSDictionary *beginSinal = @{@"audioStreamBasicDescription": ASBDData};
+    [self.session sendData:data toPeers:self.peersConnected withDataMode:GKSendDataReliable error:nil];
     
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:beginSinal];
-    
-//    [self.session sendData:data toPeers:self.peersConnected withDataMode:GKSendDataReliable error:nil];
-    
-    NSDictionary *signal = [NSKeyedUnarchiver  unarchiveObjectWithData:data];
-
-    AudioStreamBasicDescription temp;
-    [[signal objectForKey:@"audioStreamBasicDescription"] getBytes:&temp length:[[signal objectForKey:@"audioStreamBasicDescription"] length]];
-
     self.queuePlayer = [[CYAudioQueuePlayer alloc] init];
-    [self.queuePlayer setupQueueWithAudioStreamBasicDescription:temp];
-
-    [self.audioStreamer startStreaming];
+    [self.queuePlayer setupQueueWithAudioStreamBasicDescription:audioStreamBasicDescription];
+    
+    [self.audioStreamer startStreaming];    
 }
 
 - (void)streamer:(CYAudioStreamer *)streamer didGetPacketData:(NSData *)packetData
 {
+    NSDictionary *packetSignal = @{@"packetData": packetData};
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:packetSignal];
+    [self.session sendData:data toPeers:self.peersConnected withDataMode:GKSendDataReliable error:nil];
+    
     [self.queuePlayer handlePacketData:packetData];
 }
 
@@ -110,6 +104,19 @@
 // Function to receive data when sent from peer
 - (void)receiveData:(NSData *)data fromPeer:(NSString *)peer inSession: (GKSession *)session context:(void *)context
 {
+    
+    NSDictionary *signal = [NSKeyedUnarchiver  unarchiveObjectWithData:data];
+    
+    if ([signal objectForKey:@"audioStreamBasicDescription"]) {
+        AudioStreamBasicDescription temp;
+        [[signal objectForKey:@"audioStreamBasicDescription"] getBytes:&temp length:[[signal objectForKey:@"audioStreamBasicDescription"] length]];
+        
+        self.queuePlayer = [[CYAudioQueuePlayer alloc] init];
+        [self.queuePlayer setupQueueWithAudioStreamBasicDescription:temp];
+    } else if ([signal objectForKey:@"packetData"]) {
+        [self.queuePlayer handlePacketData:[signal objectForKey:@"packetData"]];
+    }
+
 }
 
 #pragma mark - GKSessionDelegate
