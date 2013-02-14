@@ -7,12 +7,14 @@
 //
 
 #import "CYPlayerViewController.h"
+#import "CYAudioSessionManager.h"
 #import "CYAudioQueuePlayer.h"
 #import "CYAudioStreamer.h"
 
 
 @interface CYPlayerViewController() <CYAudioStreamerDelegate>
 
+@property (nonatomic, strong) CYAudioSessionManager *audioSessionManager;
 @property (nonatomic, strong) CYAudioStreamer *audioStreamer;
 @property (nonatomic, strong) CYAudioQueuePlayer *queuePlayer;
 
@@ -25,6 +27,7 @@
 {
     [super viewDidLoad];
     
+    [self initAudioSessionManager];
     [self initStreamer];
     [self initQueuePlayer];
     [self initUserInterface];
@@ -35,6 +38,13 @@
     MPVolumeView *volumeView = [[MPVolumeView alloc] init];
     [volumeView setFrame:CGRectMake(20, 500, 280, 44)];
     [self.view addSubview:volumeView];
+}
+
+- (void)initAudioSessionManager
+{
+    self.audioSessionManager = [[CYAudioSessionManager alloc] init];
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    [self becomeFirstResponder];
 }
 
 - (void)initStreamer
@@ -74,6 +84,28 @@
 }
 - (IBAction)didTapStopButton:(id)sender {
     [self.queuePlayer stopQueue];
+}
+
+//Make sure we can recieve remote control events
+- (BOOL)canBecomeFirstResponder {
+    return YES;
+}
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
+    //if it is a remote control event handle it correctly
+    if (event.type == UIEventTypeRemoteControl) {
+        if (event.subtype == UIEventSubtypeRemoteControlPlay) {
+            [self.queuePlayer startQueue];
+        } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
+            [self.queuePlayer pauseQueue];
+        } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
+            if ([self.queuePlayer isPlaying]) {
+                [self.queuePlayer pauseQueue];
+            } else {
+                [self.queuePlayer startQueue];
+            }
+        }
+    }
 }
 
 @end

@@ -86,28 +86,21 @@ typedef enum
     {
         CheckError(AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_audioQueueBuffers[i]), "AudioQueueAllocateBuffer failed");
     }
-    
-    AudioSessionInitialize (
-                            NULL,                          // 'NULL' to use the default (main) run loop
-                            NULL,                          // 'NULL' to use the default run loop mode
-                            NULL,  //ASAudioSessionInterruptionListenera reference to your interruption callback
-                            NULL                       // data to pass to your interruption listener callback
-                            );
-    UInt32 sessionCategory = kAudioSessionCategory_MediaPlayback;
-    AudioSessionSetProperty (
-                             kAudioSessionProperty_AudioCategory,
-                             sizeof (sessionCategory),
-                             &sessionCategory
-                             );
-    AudioSessionSetActive(true);
-    
+}
 
-    
+- (BOOL)isPlaying
+{
+    if (_state == AS_PLAYING) {
+        return YES;
+    } else {
+        return NO;
+    }
 }
 
 - (void)startQueue;
 {
     AudioQueueStart(_queue, NULL);
+    _state = AS_PLAYING;
     
     [self.operationQueue addOperationWithBlock:^{
         while (self.packetUsedIndex < [self.packetsDatas count]) {
@@ -119,6 +112,7 @@ typedef enum
 
 - (void)pauseQueue
 {
+    _state = AS_PAUSE;
     AudioQueuePause(_queue);
 }
 
@@ -126,6 +120,7 @@ typedef enum
 
 - (void)stopQueue
 {
+    _state = AS_STOPPED;
     AudioQueueStop(_queue, TRUE);
     [self.operationQueue cancelAllOperations];
     self.packetUsedIndex = 0;
