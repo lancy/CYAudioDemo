@@ -28,6 +28,9 @@
 		BF83F71A16BECD7D0078BEDA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */; };
 		BFD7A5EE16CCE2FE007957E8 /* CYPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */; };
 		BFD7A5F916CD4B3E007957E8 /* CYAudioSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5F816CD4B3E007957E8 /* CYAudioSessionManager.m */; };
+		BFD7A5FD16CD7630007957E8 /* CYiPodLibraryHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5FC16CD7630007957E8 /* CYiPodLibraryHelper.m */; };
+		BFD7A60016CD7692007957E8 /* CYSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5FF16CD7691007957E8 /* CYSongsViewController.m */; };
+		BFD7A60316CD7852007957E8 /* CYAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A60216CD7852007957E8 /* CYAlbumsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,6 +64,12 @@
 		BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYPlayerViewController.m; sourceTree = "<group>"; };
 		BFD7A5F716CD4B3E007957E8 /* CYAudioSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYAudioSessionManager.h; sourceTree = "<group>"; };
 		BFD7A5F816CD4B3E007957E8 /* CYAudioSessionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYAudioSessionManager.m; sourceTree = "<group>"; };
+		BFD7A5FB16CD7630007957E8 /* CYiPodLibraryHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYiPodLibraryHelper.h; sourceTree = "<group>"; };
+		BFD7A5FC16CD7630007957E8 /* CYiPodLibraryHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYiPodLibraryHelper.m; sourceTree = "<group>"; };
+		BFD7A5FE16CD7691007957E8 /* CYSongsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYSongsViewController.h; sourceTree = "<group>"; };
+		BFD7A5FF16CD7691007957E8 /* CYSongsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYSongsViewController.m; sourceTree = "<group>"; };
+		BFD7A60116CD7851007957E8 /* CYAlbumsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYAlbumsViewController.h; sourceTree = "<group>"; };
+		BFD7A60216CD7852007957E8 /* CYAlbumsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYAlbumsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +135,10 @@
 				BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */,
 				BF2C0DC316BE7953002FD6E3 /* CYViewController.h */,
 				BF2C0DC416BE7953002FD6E3 /* CYViewController.m */,
+				BFD7A5FE16CD7691007957E8 /* CYSongsViewController.h */,
+				BFD7A5FF16CD7691007957E8 /* CYSongsViewController.m */,
+				BFD7A60116CD7851007957E8 /* CYAlbumsViewController.h */,
+				BFD7A60216CD7852007957E8 /* CYAlbumsViewController.m */,
 				BFD7A5FA16CD4C70007957E8 /* CYAudioHelper */,
 				BF2C0DAF16BE7953002FD6E3 /* Supporting Files */,
 			);
@@ -155,6 +168,8 @@
 				BF2C0DD516BE9999002FD6E3 /* CYAudioQueuePlayer.m */,
 				BF2C0DCB16BE7964002FD6E3 /* CYAudioStreamer.h */,
 				BF2C0DCC16BE7964002FD6E3 /* CYAudioStreamer.m */,
+				BFD7A5FB16CD7630007957E8 /* CYiPodLibraryHelper.h */,
+				BFD7A5FC16CD7630007957E8 /* CYiPodLibraryHelper.m */,
 			);
 			name = CYAudioHelper;
 			sourceTree = "<group>";
@@ -233,6 +248,9 @@
 				BF2C0DD616BE9999002FD6E3 /* CYAudioQueuePlayer.m in Sources */,
 				BFD7A5EE16CCE2FE007957E8 /* CYPlayerViewController.m in Sources */,
 				BFD7A5F916CD4B3E007957E8 /* CYAudioSessionManager.m in Sources */,
+				BFD7A5FD16CD7630007957E8 /* CYiPodLibraryHelper.m in Sources */,
+				BFD7A60016CD7692007957E8 /* CYSongsViewController.m in Sources */,
+				BFD7A60316CD7852007957E8 /* CYAlbumsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

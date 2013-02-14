@@ -1,0 +1,13 @@
+//
+//  CYSongsViewController.h
+//  CYAudioDemo
+//
+//  Created by Lancy on 15/2/13.
+//  Copyright (c) 2013 Lancy. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+@interface CYSongsViewController : UITableViewController
+
+@end
