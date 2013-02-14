@@ -26,6 +26,7 @@
 		BF2C0DDA16BECB93002FD6E3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */; };
 		BF6A38E116C111B300D41415 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6A38E016C111B300D41415 /* GameKit.framework */; };
 		BF83F71A16BECD7D0078BEDA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */; };
+		BFD7A5EE16CCE2FE007957E8 /* CYPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,6 +56,8 @@
 		BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		BF6A38E016C111B300D41415 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		BFD7A5EC16CCE2FE007957E8 /* CYPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYPlayerViewController.h; sourceTree = "<group>"; };
+		BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYPlayerViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,6 +119,8 @@
 				BF2C0DB716BE7953002FD6E3 /* CYAppDelegate.h */,
 				BF2C0DB816BE7953002FD6E3 /* CYAppDelegate.m */,
 				BF2C0DC016BE7953002FD6E3 /* MainStoryboard.storyboard */,
+				BFD7A5EC16CCE2FE007957E8 /* CYPlayerViewController.h */,
+				BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */,
 				BF2C0DC316BE7953002FD6E3 /* CYViewController.h */,
 				BF2C0DC416BE7953002FD6E3 /* CYViewController.m */,
 				BF2C0DD416BE9999002FD6E3 /* CYAudioQueuePlayer.h */,
@@ -213,6 +218,7 @@
 				BF2C0DC516BE7953002FD6E3 /* CYViewController.m in Sources */,
 				BF2C0DCD16BE7964002FD6E3 /* CYAudioStreamer.m in Sources */,
 				BF2C0DD616BE9999002FD6E3 /* CYAudioQueuePlayer.m in Sources */,
+				BFD7A5EE16CCE2FE007957E8 /* CYPlayerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -103,8 +103,10 @@
                     }
                 }
             }
-        }        
+        }
+        NSLog(@"Did finished streaming audio");
     });
+    
     
     dispatch_release(streamingQueue);
 }

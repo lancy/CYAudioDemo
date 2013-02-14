@@ -9,7 +9,7 @@
 #import "CYAudioQueuePlayer.h"
 
 
-#define kNumberPlaybackBuffers	16
+#define kNumberPlaybackBuffers	3
 
 #define kAQMaxPacketDescs 6	// Number of packet descriptions in our array (formerly 512)
 
@@ -17,50 +17,39 @@ typedef enum
 {
 	AS_INITIALIZED = 0,
 	AS_STARTING_FILE_THREAD,
+    AS_PAUSE,
     AS_BUFFERING,
 	AS_PLAYING,
     AS_STOPPED
-} AudioStreamerState;
-
-typedef struct MyPlayer {
-	// AudioQueueRef				queue; // the audio queue object
-	// AudioStreamBasicDescription dataFormat; // file's data stream description
-	AudioFileID					playbackFile; // reference to your output file
-	SInt64						packetPosition; // current packet index in output file
-	UInt32						numPacketsToRead; // number of packets to read from file
-	AudioStreamPacketDescription *packetDescs; // array of packet descriptions for read buffer
-	// AudioQueueBufferRef			buffers[kNumberPlaybackBuffers];
-	Boolean						isDone; // playback has completed
-} MyPlayer;
+} AudioQueuePlayerState;
 
 
 @interface CYAudioQueuePlayer()
 {
     UInt32 _bufferByteSize;
-    size_t _bytesFilled;				// how many bytes have been filled
-    size_t _packetsFilled;			// how many packets have been filled
     
     AudioQueueBufferRef	_audioQueueBuffers[kNumberPlaybackBuffers];
     
     AudioStreamPacketDescription _packetDescs[kAQMaxPacketDescs];	// packet descriptions for enqueuing audio
     bool _inuse[kNumberPlaybackBuffers];			// flags to indicate that a buffer is still in use
     unsigned int _fillBufferIndex;	// the index of the audioQueueBuffer that is being filled
-    
-    NSThread *_internalThread;
-    
+        
     pthread_mutex_t _queueBuffersMutex;			// a mutex to protect the inuse flags
 	pthread_cond_t _queueBufferReadyCondition;	// a condition varable for handling the inuse flags
     
     NSInteger _buffersUsed;
     
-    AudioStreamerState _state;
+    AudioQueuePlayerState _state;
     
    	OSStatus _err;
-    
    	AudioQueueRef _queue;
-    MyPlayer _player;
-
+    
 }
+
+@property (nonatomic, strong) NSOperationQueue *operationQueue;
+
+@property (nonatomic, strong) NSMutableArray *packetsDatas;
+@property (assign) NSUInteger packetUsedIndex;
 
 @end
 
@@ -68,6 +57,15 @@ typedef struct MyPlayer {
 
 - (void)setupQueueWithAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 {
+    pthread_mutex_init(&_queueBuffersMutex, NULL);
+    pthread_cond_init(&_queueBufferReadyCondition, NULL);
+
+    self.packetsDatas = [NSMutableArray array];
+    self.packetUsedIndex = 0;
+    
+    self.operationQueue = [[NSOperationQueue alloc] init];
+    [self.operationQueue setMaxConcurrentOperationCount:1];
+    
     AudioStreamBasicDescription asbd = audioStreamBasicDescription;
     
     CheckError(AudioQueueNewOutput(&asbd, // ASBD
@@ -81,26 +79,12 @@ typedef struct MyPlayer {
     
     
     
-    // adjust buffer size to represent about a half second (0.5) of audio based on this format
-    CalculateBytesForTime(asbd,  0.5, &_bufferByteSize, &_player.numPacketsToRead);
     _bufferByteSize = 2048;
     NSLog(@"this is buffer byte size %lu", _bufferByteSize);
-    //   bufferByteSize = 800;
-    
-    // get magic cookie from file and set on queue
-    MyCopyEncoderCookieToQueue(_player.playbackFile, _queue);
-    
-    // allocate the buffers and prime the queue with some data before starting
-    _player.isDone = false;
-    _player.packetPosition = 0;
     int i;
     for (i = 0; i < kNumberPlaybackBuffers; ++i)
     {
         CheckError(AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_audioQueueBuffers[i]), "AudioQueueAllocateBuffer failed");
-        
-        // EOF (the entire file's contents fit in the buffers)
-        if (_player.isDone)
-            break;
     }
     
     AudioSessionInitialize (
@@ -117,36 +101,41 @@ typedef struct MyPlayer {
                              );
     AudioSessionSetActive(true);
     
-    [self performSelectorInBackground:@selector(waitUntilDone) withObject:nil];
 
     
 }
 
-- (void)waitUntilDone
+- (void)startQueue;
 {
-    // start the queue. this function returns immedatly and begins
-    // invoking the callback, as needed, asynchronously.
-    //CheckError(AudioQueueStart(queue, NULL), "AudioQueueStart failed");
+    AudioQueueStart(_queue, NULL);
     
-    // and wait
-    printf("Playing...\n");
-    do
-    {
-        CFRunLoopRunInMode(kCFRunLoopDefaultMode, 0.25, false);
-    } while (!_player.isDone /*|| gIsRunning*/);
-    
-    // isDone represents the state of the Audio File enqueuing. This does not mean the
-    // Audio Queue is actually done playing yet. Since we have 3 half-second buffers in-flight
-    // run for continue to run for a short additional time so they can be processed
-    CFRunLoopRunInMode(kCFRunLoopDefaultMode, 2, false);
-    
-    // end playback
-    _player.isDone = true;
-    CheckError(AudioQueueStop(_queue, TRUE), "AudioQueueStop failed");
-    
-cleanup:
+    [self.operationQueue addOperationWithBlock:^{
+        while (self.packetUsedIndex < [self.packetsDatas count]) {
+            [self enqueueBuffer];
+        }
+    }];
+}
+
+
+- (void)pauseQueue
+{
+    AudioQueuePause(_queue);
+}
+
+
+
+- (void)stopQueue
+{
+    AudioQueueStop(_queue, TRUE);
+    [self.operationQueue cancelAllOperations];
+    self.packetUsedIndex = 0;
+
+
+}
+
+- (void)disposeQueue
+{
     AudioQueueDispose(_queue, TRUE);
-    AudioFileClose(_player.playbackFile);
 }
 
 
@@ -154,86 +143,42 @@ cleanup:
 
 - (void)handlePacketData:(NSData *)packetData
 {
-    _state = AS_BUFFERING;
-    UInt32 packetSize = [packetData length];
-    void *packetDataPointer = alloca(packetSize);
-
-    
-    [packetData getBytes:packetDataPointer length:packetSize];
-    
-    
-//    [packetData getBytes:packetDataPointer length:packetDescription.mDataByteSize];
-    
-    
-    AudioQueueBufferRef fillBuf = _audioQueueBuffers[_fillBufferIndex];
-    memcpy((char*)fillBuf->mAudioData + _bytesFilled,
-           (const char*)(packetDataPointer), packetSize);
-    
-    
-    
-    // fill out packet description
-    _packetDescs[_packetsFilled].mDataByteSize = packetSize;
-    _packetDescs[_packetsFilled].mStartOffset = _bytesFilled;
-    
-    
-    _bytesFilled += packetSize;
-    _packetsFilled += 1;
-    
-    [self enqueueBuffer];  
+    [self.packetsDatas addObject:packetData];    
 }
 
 - (void)enqueueBuffer
 {
     @synchronized(self)
     {
+        NSData *packetData = self.packetsDatas[self.packetUsedIndex];
+        self.packetUsedIndex++;
+        UInt32 packetSize = [packetData length];
+        void *packetDataPointer = alloca(packetSize);
+        [packetData getBytes:packetDataPointer length:packetSize];
         
+        AudioQueueBufferRef fillBuf = _audioQueueBuffers[_fillBufferIndex];
+        memcpy((char*)fillBuf->mAudioData,
+               (const char*)(packetDataPointer), packetSize);
+        
+        // fill out packet description
+        _packetDescs[0].mDataByteSize = packetSize;
+        _packetDescs[0].mStartOffset = 0;
+            
         _inuse[_fillBufferIndex] = true;		// set in use flag
         _buffersUsed++;
         
         // enqueue buffer
-        AudioQueueBufferRef fillBuf = _audioQueueBuffers[_fillBufferIndex];
-        fillBuf->mAudioDataByteSize = _bytesFilled;
-        
-		if (_packetsFilled)
-		{
-			_err = AudioQueueEnqueueBuffer(_queue, fillBuf, _packetsFilled, _packetDescs);
-		}
-		else
-		{
-			_err = AudioQueueEnqueueBuffer(_queue, fillBuf, 0, NULL);
-		}
-        
+        fillBuf->mAudioDataByteSize = packetSize;
+                
+        _err = AudioQueueEnqueueBuffer(_queue, fillBuf, 1, _packetDescs);
         if (_err)
         {
             NSLog(@"could not enqueue queue with buffer");
             return;
         }
         
-        
-        if (_state == AS_BUFFERING)
-        {
-            //
-            // Fill all the buffers before starting. This ensures that the
-            // AudioFileStream stays a small amount ahead of the AudioQueue to
-            // avoid an audio glitch playing streaming files on iPhone SDKs < 3.0
-            //
-            if (_buffersUsed == kNumberPlaybackBuffers - 1)
-            {
-//                NSLog(@"STARTING THE QUEUE");
-                _err = AudioQueueStart(_queue, NULL);
-                if (_err)
-                {
-                    NSLog(@"couldn't start queue");
-                    return;
-                }
-                _state = AS_PLAYING;
-            }
-        }
-        
         // go to next buffer
         if (++_fillBufferIndex >= kNumberPlaybackBuffers) _fillBufferIndex = 0;
-        _bytesFilled = 0;		// reset bytes filled
-   		_packetsFilled = 0;		// reset packets filled
         
     }
     
@@ -242,7 +187,7 @@ cleanup:
     while (_inuse[_fillBufferIndex])
     {
         pthread_cond_wait(&_queueBufferReadyCondition, &_queueBuffersMutex);
-    }
+    } 
     pthread_mutex_unlock(&_queueBuffersMutex);
 }
 
@@ -278,63 +223,15 @@ audioQueueBufferRef:(AudioQueueBufferRef)inCompleteAQBuffer
         return;
     }
     
+    pthread_mutex_lock(&_queueBuffersMutex);
     
-//    NSLog(@"in call back and we are freeing buf index %d", bufIndex);
     _inuse[bufIndex] = false;
     _buffersUsed--;
-}
+    
+    pthread_cond_signal(&_queueBufferReadyCondition);
+    pthread_mutex_unlock(&_queueBuffersMutex);
 
-#pragma mark - Utility functions
-
-// many encoded formats require a 'magic cookie'. if the file has a cookie we get it
-// and configure the queue with it
-static void MyCopyEncoderCookieToQueue(AudioFileID theFile, AudioQueueRef queue ) {
-    UInt32 propertySize;
-    OSStatus result = AudioFileGetPropertyInfo (theFile, kAudioFilePropertyMagicCookieData, &propertySize, NULL);
-    if (result == noErr && propertySize > 0)
-    {
-        Byte* magicCookie = (UInt8*)malloc(sizeof(UInt8) * propertySize);
-        CheckError(AudioFileGetProperty (theFile, kAudioFilePropertyMagicCookieData, &propertySize, magicCookie), "get cookie from file failed");
-        CheckError(AudioQueueSetProperty(queue, kAudioQueueProperty_MagicCookie, magicCookie, propertySize), "set cookie on queue failed");
-        free(magicCookie);
-    }
-}
-
-
-void CalculateBytesForTime(AudioStreamBasicDescription inDesc, Float64 inSeconds, UInt32 *outBufferSize, UInt32 *outNumPackets)
-{
     
-    // we need to calculate how many packets we read at a time, and how big a buffer we need.
-    // we base this on the size of the packets in the file and an approximate duration for each buffer.
-    //
-    // first check to see what the max size of a packet is, if it is bigger than our default
-    // allocation size, that needs to become larger
-    
-    // we don't have access to file packet size, so we just default it to maxBufferSize
-    UInt32 maxPacketSize = 0x10000;
-    
-    static const int maxBufferSize = 0x10000; // limit size to 64K
-    static const int minBufferSize = 0x4000; // limit size to 16K
-    
-    if (inDesc.mFramesPerPacket) {
-        Float64 numPacketsForTime = inDesc.mSampleRate / inDesc.mFramesPerPacket * inSeconds;
-        *outBufferSize = numPacketsForTime * maxPacketSize;
-    } else {
-        // if frames per packet is zero, then the codec has no predictable packet == time
-        // so we can't tailor this (we don't know how many Packets represent a time period
-        // we'll just return a default buffer size
-        *outBufferSize = maxBufferSize > maxPacketSize ? maxBufferSize : maxPacketSize;
-    }
-    
-    // we're going to limit our size to our default
-    if (*outBufferSize > maxBufferSize && *outBufferSize > maxPacketSize)
-        *outBufferSize = maxBufferSize;
-    else {
-        // also make sure we're not too small - we don't want to go the disk for too small chunks
-        if (*outBufferSize < minBufferSize)
-            *outBufferSize = minBufferSize;
-    }
-    *outNumPackets = *outBufferSize / maxPacketSize;
 }
 
 // generic error handler - if err is nonzero, prints error message and exits program.

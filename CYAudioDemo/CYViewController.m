@@ -46,7 +46,7 @@
     [conectButton setFrame:CGRectMake(20, 100, 280, 44)];
     [conectButton setTag:12];
     [self.view addSubview:conectButton];
-
+        
 }
 
 - (void)beginStreaming

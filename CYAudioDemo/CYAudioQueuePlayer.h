@@ -17,4 +17,9 @@
 - (void)handlePacketData:(NSData *)packetData;
 - (void)setupQueueWithAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 
+- (void)startQueue;
+- (void)stopQueue;
+- (void)pauseQueue;
+
+
 @end
