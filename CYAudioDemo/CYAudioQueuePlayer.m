@@ -16,7 +16,6 @@
 typedef enum
 {
 	AS_INITIALIZED = 0,
-	AS_STARTING_FILE_THREAD,
     AS_PAUSE,
     AS_BUFFERING,
 	AS_PLAYING,
@@ -59,6 +58,8 @@ typedef enum
 {
     pthread_mutex_init(&_queueBuffersMutex, NULL);
     pthread_cond_init(&_queueBufferReadyCondition, NULL);
+    
+    _state = AS_INITIALIZED;
 
     self.packetsDatas = [NSMutableArray array];
     self.packetUsedIndex = 0;

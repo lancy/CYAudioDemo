@@ -14,8 +14,9 @@
 @interface CYAudioQueuePlayer : NSObject
 
 
-- (void)handlePacketData:(NSData *)packetData;
 - (void)setupQueueWithAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
+- (void)handlePacketData:(NSData *)packetData;
+
 
 - (BOOL)isPlaying;
 - (void)startQueue;
