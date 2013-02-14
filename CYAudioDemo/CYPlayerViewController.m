@@ -27,10 +27,34 @@
 {
     [super viewDidLoad];
     
+    [self initNotification];
     [self initAudioSessionManager];
     [self initStreamer];
     [self initQueuePlayer];
     [self initUserInterface];
+}
+
+- (void)initNotification
+{
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(CYAudioQueuePlayerDidStopPlaying) name:@"CYAudioQueuePlayerDidStopPlaying" object:nil];
+}
+
+- (void)CYAudioQueuePlayerDidStopPlaying
+{
+    static int currentPlaying = 3;
+    currentPlaying++;
+    
+    MPMediaQuery *everything = [[MPMediaQuery alloc] init];
+    NSArray *itemsFromGenericQuery = [everything items];
+    MPMediaItem *mediaItem = [itemsFromGenericQuery objectAtIndex:currentPlaying];
+    NSLog(@"%@", [mediaItem valueForProperty:MPMediaItemPropertyTitle]);
+    AVURLAsset *songAsset = [AVURLAsset assetWithURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL]];
+    
+    self.audioStreamer = [[CYAudioStreamer alloc] initWithUrlAssert:songAsset delegate:self];
+    
+    [self.audioStreamer startStreaming];
+    [self.queuePlayer startQueue];
+    
 }
 
 - (void)initUserInterface

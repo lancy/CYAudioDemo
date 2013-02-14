@@ -24,6 +24,8 @@
         [self setDelegate:delegate];
         NSError *error = nil;
         _assertReader = [[AVAssetReader alloc] initWithAsset:urlAssert error:&error];
+        
+//        [_assertReader setTimeRange:CMTimeRangeMake(kCMTimeZero, CMTimeMake(5, 1))];
         [_assertReader setTimeRange:CMTimeRangeMake(kCMTimeZero, urlAssert.duration)];
         
         AVAssetTrack* track = [urlAssert.tracks objectAtIndex:0];
@@ -71,8 +73,8 @@
                     } else {
                         numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY;
                     }
-                    NSLog(@"mDataByteSize = %ld", audioBuffer.mDataByteSize);
-                    NSLog(@"numberOfPacket = %d", numberOfPacket);
+//                    NSLog(@"mDataByteSize = %ld", audioBuffer.mDataByteSize);
+//                    NSLog(@"numberOfPacket = %d", numberOfPacket);
                     
                     // AudioBufferのデータを格納しているポインタ
                     void *audioBufferPointer = audioBuffer.mData;

@@ -86,6 +86,8 @@ typedef enum
     {
         CheckError(AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_audioQueueBuffers[i]), "AudioQueueAllocateBuffer failed");
     }
+    
+    AudioQueueAddPropertyListener(_queue, kAudioQueueProperty_IsRunning, audioQueueFinishedPlayingCallback, (__bridge void *)self);
 }
 
 - (BOOL)isPlaying
@@ -106,6 +108,7 @@ typedef enum
         while (self.packetUsedIndex < [self.packetsDatas count]) {
             [self enqueueBuffer];
         }
+        [self stopQueue];
     }];
 }
 
@@ -124,6 +127,7 @@ typedef enum
     AudioQueueStop(_queue, TRUE);
     [self.operationQueue cancelAllOperations];
     self.packetUsedIndex = 0;
+    [self.packetsDatas removeAllObjects];
 
 
 }
@@ -228,6 +232,28 @@ audioQueueBufferRef:(AudioQueueBufferRef)inCompleteAQBuffer
 
     
 }
+
+void audioQueueFinishedPlayingCallback (
+                                       void                  *inUserData,
+                                       AudioQueueRef         inAQ,
+                                       AudioQueuePropertyID  inID
+                                       )
+{
+    UInt32 isRunning;
+    UInt32 dataSize = sizeof(UInt32);
+    AudioQueueGetProperty(inAQ, inID, &isRunning, &dataSize);
+    if (isRunning == 0) {
+        CYAudioQueuePlayer *audioQueuePlayer = (__bridge CYAudioQueuePlayer *) inUserData;
+        [audioQueuePlayer didStopPlaying];
+    }
+}
+
+- (void)didStopPlaying
+{
+    NSLog(@"did stop playing");
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CYAudioQueuePlayerDidStopPlaying" object:nil];
+}
+
 
 // generic error handler - if err is nonzero, prints error message and exits program.
 static void CheckError(OSStatus error, const char *operation)
