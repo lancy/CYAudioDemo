@@ -7,7 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface CYMusicQueueManager : NSObject
+
+- (void)addMediaItemCollection:(MPMediaItemCollection *)mediaItemCollection;
+- (void)addMediaItem:(MPMediaItem *)mediaItem;
+- (void)addListenerItem;
+
+- (void)removeAllItems;
+
+- (id)getCurrentMusic;
+- (id)getNextMusic;
+- (id)getLastMusic;
 
 @end
