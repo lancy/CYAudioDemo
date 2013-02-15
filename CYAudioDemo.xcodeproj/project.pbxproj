@@ -26,6 +26,7 @@
 		BF2C0DDA16BECB93002FD6E3 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */; };
 		BF6A38E116C111B300D41415 /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF6A38E016C111B300D41415 /* GameKit.framework */; };
 		BF83F71A16BECD7D0078BEDA /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */; };
+		BF93C7DD16CE67CC002A52BC /* CYMusicQueueManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BF93C7DC16CE67CC002A52BC /* CYMusicQueueManager.m */; };
 		BFD7A5EE16CCE2FE007957E8 /* CYPlayerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */; };
 		BFD7A5F916CD4B3E007957E8 /* CYAudioSessionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5F816CD4B3E007957E8 /* CYAudioSessionManager.m */; };
 		BFD7A60016CD7692007957E8 /* CYSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5FF16CD7691007957E8 /* CYSongsViewController.m */; };
@@ -68,6 +69,8 @@
 		BF2C0DD916BECB93002FD6E3 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		BF6A38E016C111B300D41415 /* GameKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GameKit.framework; path = System/Library/Frameworks/GameKit.framework; sourceTree = SDKROOT; };
 		BF83F71916BECD7D0078BEDA /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		BF93C7DB16CE67CB002A52BC /* CYMusicQueueManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYMusicQueueManager.h; sourceTree = "<group>"; };
+		BF93C7DC16CE67CC002A52BC /* CYMusicQueueManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYMusicQueueManager.m; sourceTree = "<group>"; };
 		BFD7A5EC16CCE2FE007957E8 /* CYPlayerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYPlayerViewController.h; sourceTree = "<group>"; };
 		BFD7A5ED16CCE2FE007957E8 /* CYPlayerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYPlayerViewController.m; sourceTree = "<group>"; };
 		BFD7A5F716CD4B3E007957E8 /* CYAudioSessionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYAudioSessionManager.h; sourceTree = "<group>"; };
@@ -181,6 +184,8 @@
 			children = (
 				BFD7A60416CE008E007957E8 /* CYMusicManager.h */,
 				BFD7A60516CE008E007957E8 /* CYMusicManager.m */,
+				BF93C7DB16CE67CB002A52BC /* CYMusicQueueManager.h */,
+				BF93C7DC16CE67CC002A52BC /* CYMusicQueueManager.m */,
 				BFD7A5F716CD4B3E007957E8 /* CYAudioSessionManager.h */,
 				BFD7A5F816CD4B3E007957E8 /* CYAudioSessionManager.m */,
 				BF2C0DD416BE9999002FD6E3 /* CYAudioQueuePlayer.h */,
@@ -291,6 +296,7 @@
 				BFD7A60016CD7692007957E8 /* CYSongsViewController.m in Sources */,
 				BFD7A60316CD7852007957E8 /* CYAlbumsViewController.m in Sources */,
 				BFD7A60616CE008E007957E8 /* CYMusicManager.m in Sources */,
+				BF93C7DD16CE67CC002A52BC /* CYMusicQueueManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

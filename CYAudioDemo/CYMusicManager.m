@@ -9,14 +9,15 @@
 #import "CYAudioSessionManager.h"
 #import "CYAudioQueuePlayer.h"
 #import "CYAudioStreamer.h"
-
 #import "CYMusicManager.h"
+#import "CYMusicQueueManager.h"
 
-@interface CYMusicManager() <CYAudioStreamerDelegate>
+@interface CYMusicManager() <CYAudioStreamerDelegate, CYAudioQueuePlayerDelegate>
 
 @property (nonatomic, strong) CYAudioSessionManager *audioSessionManager;
 @property (nonatomic, strong) CYAudioStreamer *audioStreamer;
 @property (nonatomic, strong) CYAudioQueuePlayer *audioQueuePlayer;
+@property (nonatomic, strong) CYMusicQueueManager *musicQueueManager;
 
 @end
 
@@ -35,9 +36,36 @@
 {
     if (self = [super init]) {
         [self initAudioSessionManager];
+        [self initMusicQueueManager];
     }
     return self;
 }
+
+- (void)initMusicQueueManager
+{
+    self.musicQueueManager = [[CYMusicQueueManager alloc] init];
+}
+
+- (void)initAudioSessionManager
+{
+    self.audioSessionManager = [[CYAudioSessionManager alloc] init];
+}
+
+- (void)initStreamerWithMediaItem:(MPMediaItem *)mediaItem
+{
+    NSLog(@"%@", [mediaItem valueForProperty:MPMediaItemPropertyTitle]);
+    AVURLAsset *songAsset = [AVURLAsset assetWithURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL]];
+    self.audioStreamer = [[CYAudioStreamer alloc] initWithUrlAssert:songAsset delegate:self];
+}
+
+- (void)initAudioQueuePlayer
+{
+    self.audioQueuePlayer = [[CYAudioQueuePlayer alloc] init];
+    [self.audioQueuePlayer setupQueueWithAudioStreamBasicDescription:[self.audioStreamer audioStreamBasicDescription]];
+    [self.audioQueuePlayer setDelegate:self];
+}
+
+#pragma mark - queue manager
 
 - (void)playMediaItem:(MPMediaItem *)mediaItem
 {
@@ -60,26 +88,9 @@
     } else {
         [self.audioQueuePlayer startQueue];
     }
-    
 }
 
-- (void)initAudioSessionManager
-{
-    self.audioSessionManager = [[CYAudioSessionManager alloc] init];
-}
-
-- (void)initStreamerWithMediaItem:(MPMediaItem *)mediaItem
-{
-    NSLog(@"%@", [mediaItem valueForProperty:MPMediaItemPropertyTitle]);
-    AVURLAsset *songAsset = [AVURLAsset assetWithURL:[mediaItem valueForProperty:MPMediaItemPropertyAssetURL]];
-    self.audioStreamer = [[CYAudioStreamer alloc] initWithUrlAssert:songAsset delegate:self];
-}
-
-- (void)initAudioQueuePlayer
-{
-    self.audioQueuePlayer = [[CYAudioQueuePlayer alloc] init];
-    [self.audioQueuePlayer setupQueueWithAudioStreamBasicDescription:[self.audioStreamer audioStreamBasicDescription]];
-}
+#pragma mark - streamer delegate
 
 - (void)streamer:(CYAudioStreamer *)streamer didGetPacketData:(NSData *)packetData
 {
@@ -89,6 +100,14 @@
         NSLog(@"Warning: didn't init palyer");
     }
 }
+
+#pragma mark - player deleagte
+
+- (void)didStopPlayingWithPlayer:(CYAudioQueuePlayer *)player
+{
+    NSLog(@"CYAudioQueuePlayerDidStopPlaying");
+}
+
 
 
 
