@@ -11,8 +11,18 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import <pthread.h>
 
+
+@class CYAudioQueuePlayer;
+
+@protocol CYAudioQueuePlayerDelegate <NSObject>
+@optional
+- (void)didStopPlayingWithPlayer:(CYAudioQueuePlayer *)player;
+
+@end
+
 @interface CYAudioQueuePlayer : NSObject
 
+@property (nonatomic, weak) id<CYAudioQueuePlayerDelegate> delegate;
 
 - (void)setupQueueWithAudioStreamBasicDescription:(AudioStreamBasicDescription)audioStreamBasicDescription;
 - (void)handlePacketData:(NSData *)packetData;
