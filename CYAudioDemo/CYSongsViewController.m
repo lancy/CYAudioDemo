@@ -10,6 +10,7 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import "CYSongsViewController.h"
 #import "CYMusicManager.h"
+#import "CYMusicQueueManager.h"
 
 
 @interface CYSongsViewController ()
@@ -119,7 +120,9 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MPMediaItem *item = [self.songsItems objectAtIndex:indexPath.row];
-    [[CYMusicManager shareManager] playMediaItem:item];
+    [[CYMusicQueueManager shareManager] removeAllItems];
+    [[CYMusicQueueManager shareManager] addMediaItem:item];
+    [[CYMusicManager shareManager] playDefaultMusicQueue];
 }
 
 @end

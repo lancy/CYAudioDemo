@@ -13,9 +13,12 @@
 
 + (CYMusicManager *)shareManager;
 
+- (void)playDefaultMusicQueue;
 - (void)playMediaItem:(MPMediaItem *)mediaItem;
 
 - (void)togglePlayPause;
+- (void)playNextMusic;
+- (void)playPreviousMusic;
 
 
 

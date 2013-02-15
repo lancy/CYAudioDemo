@@ -17,7 +17,6 @@
 @property (nonatomic, strong) CYAudioSessionManager *audioSessionManager;
 @property (nonatomic, strong) CYAudioStreamer *audioStreamer;
 @property (nonatomic, strong) CYAudioQueuePlayer *audioQueuePlayer;
-@property (nonatomic, strong) CYMusicQueueManager *musicQueueManager;
 
 @end
 
@@ -36,15 +35,10 @@
 {
     if (self = [super init]) {
         [self initAudioSessionManager];
-        [self initMusicQueueManager];
     }
     return self;
 }
 
-- (void)initMusicQueueManager
-{
-    self.musicQueueManager = [[CYMusicQueueManager alloc] init];
-}
 
 - (void)initAudioSessionManager
 {
@@ -67,8 +61,17 @@
 
 #pragma mark - queue manager
 
+- (void)playDefaultMusicQueue
+{
+    id item = [[CYMusicQueueManager shareManager] currentItem];
+    if ([item isKindOfClass:[MPMediaItem class]]) {
+        [self playMediaItem:item];
+    }
+}
+
 - (void)playMediaItem:(MPMediaItem *)mediaItem
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CYMusicManagerDidChangedPlayingItem" object:mediaItem];
     if (self.audioQueuePlayer) {
         [self.audioQueuePlayer stopQueue];
     }
@@ -90,6 +93,23 @@
     }
 }
 
+- (void)playNextMusic
+{
+    id item = [[CYMusicQueueManager shareManager] nextItem];
+    if ([item isKindOfClass:[MPMediaItem class]]) {
+        [self playMediaItem:item];
+    }
+
+}
+- (void)playPreviousMusic
+{
+    id item = [[CYMusicQueueManager shareManager] lastItem];
+    if ([item isKindOfClass:[MPMediaItem class]]) {
+        [self playMediaItem:item];
+    }
+}
+
+
 #pragma mark - streamer delegate
 
 - (void)streamer:(CYAudioStreamer *)streamer didGetPacketData:(NSData *)packetData
@@ -103,11 +123,13 @@
 
 #pragma mark - player deleagte
 
-- (void)didStopPlayingWithPlayer:(CYAudioQueuePlayer *)player
+- (void)player:(CYAudioQueuePlayer *)player didStopPlayingWithFinishedFlag:(BOOL)isFinishedPlaying
 {
-    NSLog(@"CYAudioQueuePlayerDidStopPlaying");
+    NSLog(@"did stop playing with finished flag: %d", isFinishedPlaying);
+    if (isFinishedPlaying) {
+        [self playNextMusic];
+    }
 }
-
 
 
 

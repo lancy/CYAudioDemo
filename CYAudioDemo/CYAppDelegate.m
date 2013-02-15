@@ -52,6 +52,10 @@
         } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
         } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
             [[CYMusicManager shareManager] togglePlayPause];
+        } else if (event.subtype == UIEventSubtypeRemoteControlNextTrack) {
+            [[CYMusicManager shareManager] playNextMusic];
+        } else if (event.subtype == UIEventSubtypeRemoteControlPreviousTrack) {
+            [[CYMusicManager shareManager] playPreviousMusic];
         }
     }
 }

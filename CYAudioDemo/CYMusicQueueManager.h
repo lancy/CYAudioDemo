@@ -11,14 +11,17 @@
 
 @interface CYMusicQueueManager : NSObject
 
+
++ (CYMusicQueueManager *)shareManager;
+
 - (void)addMediaItemCollection:(MPMediaItemCollection *)mediaItemCollection;
 - (void)addMediaItem:(MPMediaItem *)mediaItem;
 - (void)addListenerItem;
 
 - (void)removeAllItems;
 
-- (id)getCurrentMusic;
-- (id)getNextMusic;
-- (id)getLastMusic;
+- (id)currentItem;
+- (id)nextItem;
+- (id)lastItem;
 
 @end

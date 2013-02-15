@@ -17,6 +17,14 @@
 
 @implementation CYMusicQueueManager
 
++ (CYMusicQueueManager *)shareManager
+{
+    static CYMusicQueueManager* shareManager;
+    if (!shareManager) {
+        shareManager = [[CYMusicQueueManager alloc] init];
+    }
+    return shareManager;
+}
 
 - (id)init
 {
@@ -46,19 +54,27 @@
 {
     [self.musicQueue addObject:@"CYListenerItem"];
 }
-- (id)getCurrentMusic
+- (id)currentItem
 {
     return self.musicQueue[self.currentPlayingIndex];
 }
-- (id)getNextMusic
+- (id)nextItem
 {
-    self.currentPlayingIndex++;
-    return self.musicQueue[self.currentPlayingIndex];
+    if (self.currentPlayingIndex < [self.musicQueue count]) {
+        self.currentPlayingIndex++;
+        return self.musicQueue[self.currentPlayingIndex];
+    } else {
+        return nil;
+    }
 }
-- (id)getLastMusic
+- (id)lastItem
 {
-    self.currentPlayingIndex--;
-    return self.musicQueue[self.currentPlayingIndex];
+    if (self.currentPlayingIndex > 0) {
+        self.currentPlayingIndex--;
+        return self.musicQueue[self.currentPlayingIndex];
+    } else {
+        return nil;
+    }
 }
 
 

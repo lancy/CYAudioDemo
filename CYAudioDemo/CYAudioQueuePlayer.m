@@ -49,6 +49,8 @@ typedef enum
 @property (nonatomic, strong) NSMutableArray *packetsDatas;
 @property (assign) NSUInteger packetUsedIndex;
 
+@property (assign) BOOL isFinishedPlaying;
+
 @end
 
 @implementation CYAudioQueuePlayer
@@ -102,11 +104,13 @@ typedef enum
 {
     AudioQueueStart(_queue, NULL);
     _state = AS_PLAYING;
+    self.isFinishedPlaying = NO;
     
     [self.operationQueue addOperationWithBlock:^{
         while (self.packetUsedIndex < [self.packetsDatas count]) {
             [self enqueueBuffer];
         }
+        self.isFinishedPlaying = YES;
         [self stopQueue];
     }];
 }
@@ -248,8 +252,8 @@ void audioQueueFinishedPlayingCallback (
 
 - (void)didStopPlaying
 {
-    if ([self.delegate respondsToSelector:@selector(didStopPlayingWithPlayer:)]) {
-        [self.delegate didStopPlayingWithPlayer:self];
+    if ([self.delegate respondsToSelector:@selector(player:didStopPlayingWithFinishedFlag:)]) {
+        [self.delegate player:self didStopPlayingWithFinishedFlag:self.isFinishedPlaying];
     }
 }
 

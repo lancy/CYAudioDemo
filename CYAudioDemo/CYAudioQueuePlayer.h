@@ -16,7 +16,7 @@
 
 @protocol CYAudioQueuePlayerDelegate <NSObject>
 @optional
-- (void)didStopPlayingWithPlayer:(CYAudioQueuePlayer *)player;
+- (void)player:(CYAudioQueuePlayer *)player didStopPlayingWithFinishedFlag:(BOOL)isFinishedPlaying;
 
 @end
 
