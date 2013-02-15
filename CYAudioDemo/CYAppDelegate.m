@@ -7,12 +7,14 @@
 //
 
 #import "CYAppDelegate.h"
+#import "CYMusicManager.h"
 
 @implementation CYAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     return YES;
 }
 							
@@ -42,5 +44,17 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event {
+    //if it is a remote control event handle it correctly
+    if (event.type == UIEventTypeRemoteControl) {
+        if (event.subtype == UIEventSubtypeRemoteControlPlay) {
+        } else if (event.subtype == UIEventSubtypeRemoteControlPause) {
+        } else if (event.subtype == UIEventSubtypeRemoteControlTogglePlayPause) {
+            [[CYMusicManager shareManager] togglePlayPause];
+        }
+    }
+}
+
 
 @end

@@ -248,7 +248,7 @@ void audioQueueFinishedPlayingCallback (
 
 - (void)didStopPlaying
 {
-    NSLog(@"did stop playing");
+    NSLog(@"CYAudioQueuePlayerDidStopPlaying");
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CYAudioQueuePlayerDidStopPlaying" object:nil];
 }
 

@@ -31,6 +31,14 @@
 		BFD7A60016CD7692007957E8 /* CYSongsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A5FF16CD7691007957E8 /* CYSongsViewController.m */; };
 		BFD7A60316CD7852007957E8 /* CYAlbumsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A60216CD7852007957E8 /* CYAlbumsViewController.m */; };
 		BFD7A60616CE008E007957E8 /* CYMusicManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BFD7A60516CE008E007957E8 /* CYMusicManager.m */; };
+		BFD7A60F16CE2695007957E8 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A60716CE2692007957E8 /* Icon-72.png */; };
+		BFD7A61016CE2695007957E8 /* Icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A60816CE2693007957E8 /* Icon-72@2x.png */; };
+		BFD7A61116CE2695007957E8 /* Icon-Small-50.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A60916CE2693007957E8 /* Icon-Small-50.png */; };
+		BFD7A61216CE2695007957E8 /* Icon-Small-50@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A60A16CE2693007957E8 /* Icon-Small-50@2x.png */; };
+		BFD7A61316CE2695007957E8 /* Icon-Small.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A60B16CE2694007957E8 /* Icon-Small.png */; };
+		BFD7A61416CE2695007957E8 /* Icon-Small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A60C16CE2694007957E8 /* Icon-Small@2x.png */; };
+		BFD7A61916CE26C6007957E8 /* Icon.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A61816CE26C6007957E8 /* Icon.png */; };
+		BFD7A61B16CE26D2007957E8 /* Icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = BFD7A61A16CE26D2007957E8 /* Icon@2x.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -70,6 +78,14 @@
 		BFD7A60216CD7852007957E8 /* CYAlbumsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYAlbumsViewController.m; sourceTree = "<group>"; };
 		BFD7A60416CE008E007957E8 /* CYMusicManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CYMusicManager.h; sourceTree = "<group>"; };
 		BFD7A60516CE008E007957E8 /* CYMusicManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CYMusicManager.m; sourceTree = "<group>"; };
+		BFD7A60716CE2692007957E8 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = "<group>"; };
+		BFD7A60816CE2693007957E8 /* Icon-72@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72@2x.png"; sourceTree = "<group>"; };
+		BFD7A60916CE2693007957E8 /* Icon-Small-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50.png"; sourceTree = "<group>"; };
+		BFD7A60A16CE2693007957E8 /* Icon-Small-50@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small-50@2x.png"; sourceTree = "<group>"; };
+		BFD7A60B16CE2694007957E8 /* Icon-Small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small.png"; sourceTree = "<group>"; };
+		BFD7A60C16CE2694007957E8 /* Icon-Small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-Small@2x.png"; sourceTree = "<group>"; };
+		BFD7A61816CE26C6007957E8 /* Icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Icon.png; path = ../Icon.png; sourceTree = "<group>"; };
+		BFD7A61A16CE26D2007957E8 /* Icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Icon@2x.png"; path = "../Icon@2x.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,6 +164,7 @@
 		BF2C0DAF16BE7953002FD6E3 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				BFD7A61716CE269B007957E8 /* icon */,
 				BF2C0DB016BE7953002FD6E3 /* CYAudioDemo-Info.plist */,
 				BF2C0DB116BE7953002FD6E3 /* InfoPlist.strings */,
 				BF2C0DB416BE7953002FD6E3 /* main.m */,
@@ -172,6 +189,21 @@
 				BF2C0DCC16BE7964002FD6E3 /* CYAudioStreamer.m */,
 			);
 			name = CYAudioHelper;
+			sourceTree = "<group>";
+		};
+		BFD7A61716CE269B007957E8 /* icon */ = {
+			isa = PBXGroup;
+			children = (
+				BFD7A61A16CE26D2007957E8 /* Icon@2x.png */,
+				BFD7A61816CE26C6007957E8 /* Icon.png */,
+				BFD7A60716CE2692007957E8 /* Icon-72.png */,
+				BFD7A60816CE2693007957E8 /* Icon-72@2x.png */,
+				BFD7A60916CE2693007957E8 /* Icon-Small-50.png */,
+				BFD7A60A16CE2693007957E8 /* Icon-Small-50@2x.png */,
+				BFD7A60B16CE2694007957E8 /* Icon-Small.png */,
+				BFD7A60C16CE2694007957E8 /* Icon-Small@2x.png */,
+			);
+			name = icon;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -231,6 +263,14 @@
 				BF2C0DBD16BE7953002FD6E3 /* Default@2x.png in Resources */,
 				BF2C0DBF16BE7953002FD6E3 /* Default-568h@2x.png in Resources */,
 				BF2C0DC216BE7953002FD6E3 /* MainStoryboard.storyboard in Resources */,
+				BFD7A60F16CE2695007957E8 /* Icon-72.png in Resources */,
+				BFD7A61016CE2695007957E8 /* Icon-72@2x.png in Resources */,
+				BFD7A61116CE2695007957E8 /* Icon-Small-50.png in Resources */,
+				BFD7A61216CE2695007957E8 /* Icon-Small-50@2x.png in Resources */,
+				BFD7A61316CE2695007957E8 /* Icon-Small.png in Resources */,
+				BFD7A61416CE2695007957E8 /* Icon-Small@2x.png in Resources */,
+				BFD7A61916CE26C6007957E8 /* Icon.png in Resources */,
+				BFD7A61B16CE26D2007957E8 /* Icon@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

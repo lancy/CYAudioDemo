@@ -7,11 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface CYMusicManager : NSObject
 
 + (CYMusicManager *)shareManager;
+
 - (void)playMediaItem:(MPMediaItem *)mediaItem;
+
+- (void)togglePlayPause;
+
 
 
 @end

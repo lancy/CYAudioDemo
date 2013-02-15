@@ -53,6 +53,16 @@
     [self.audioQueuePlayer startQueue];
 }
 
+- (void)togglePlayPause
+{
+    if ([self.audioQueuePlayer isPlaying]) {
+        [self.audioQueuePlayer pauseQueue];
+    } else {
+        [self.audioQueuePlayer startQueue];
+    }
+    
+}
+
 - (void)initAudioSessionManager
 {
     self.audioSessionManager = [[CYAudioSessionManager alloc] init];

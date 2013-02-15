@@ -18,7 +18,6 @@
 @property (nonatomic, strong) CYAudioStreamer *audioStreamer;
 @property (nonatomic, strong) CYAudioQueuePlayer *queuePlayer;
 
-
 @end
 
 @implementation CYPlayerViewController
