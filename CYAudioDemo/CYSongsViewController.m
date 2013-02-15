@@ -9,6 +9,7 @@
 
 #import <MediaPlayer/MediaPlayer.h>
 #import "CYSongsViewController.h"
+#import "CYMusicManager.h"
 
 
 @interface CYSongsViewController ()
@@ -117,13 +118,8 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    // Navigation logic may go here. Create and push another view controller.
-    /*
-     <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-     [self.navigationController pushViewController:detailViewController animated:YES];
-     */
+    MPMediaItem *item = [self.songsItems objectAtIndex:indexPath.row];
+    [[CYMusicManager shareManager] playMediaItem:item];
 }
 
 @end

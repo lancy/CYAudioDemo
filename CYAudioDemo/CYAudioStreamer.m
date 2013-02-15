@@ -50,7 +50,6 @@
         while ((sampleBuffer = [self.assertReaderOutput copyNextSampleBuffer])) {
             
             if (sampleBuffer) {
-                
                 CMTime durationTime = CMSampleBufferGetDuration(sampleBuffer);
                 if (CMTimeGetSeconds(durationTime) == 0.0) {
                     break;
@@ -64,8 +63,6 @@
                 for (int i = 0; i < audioBufferList.mNumberBuffers; i++) {
                     AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
                     
-                    // 何回に分けてパケットを送るか計算
-                    // PACKET_CAPACITYは一度にBluetoothで送るパケットサイズ
                     int mod = audioBuffer.mDataByteSize % PACKET_CAPACITY;
                     int numberOfPacket;
                     if (mod != 0) {
@@ -73,13 +70,10 @@
                     } else {
                         numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY;
                     }
-//                    NSLog(@"mDataByteSize = %ld", audioBuffer.mDataByteSize);
-//                    NSLog(@"numberOfPacket = %d", numberOfPacket);
                     
                     // AudioBufferのデータを格納しているポインタ
                     void *audioBufferPointer = audioBuffer.mData;
                     
-                    // 残りデータサイズ
                     int remainedDataSize = audioBuffer.mDataByteSize;
                     for (int i = 0; i < numberOfPacket; i++) {
                         int sendDataSize;
@@ -89,36 +83,41 @@
                             sendDataSize = PACKET_CAPACITY;
                         }
                         
-                        NSData *data = [NSMutableData dataWithBytes:audioBufferPointer length:sendDataSize];
+                        NSData *data = [NSData dataWithBytes:audioBufferPointer length:sendDataSize];
                         
                         if ([self.delegate respondsToSelector:@selector(streamer:didGetPacketData:)]) {
                             [self.delegate streamer:self didGetPacketData:data];
                         }
-                                                
-                        // 残りデータサイズの更新
+                        
                         remainedDataSize -= sendDataSize;
                         
-                        // ポインタを先に進める
                         if (i < numberOfPacket - 1) {
                             audioBufferPointer += PACKET_CAPACITY;
                         }
                     }
                 }
+                CMSampleBufferInvalidate(sampleBuffer);
+                CFRelease(sampleBuffer);
+                sampleBuffer = NULL;
+
             }
         }
         NSLog(@"Did finished streaming audio");
     });
-    
-    
     dispatch_release(streamingQueue);
 }
 
+- (void)cancleStreaming
+{
+    [self.assertReader cancelReading];
+}
 
 - (AudioStreamBasicDescription)getTrackNativeSettings:(AVAssetTrack *) track
 {
     
     CMFormatDescriptionRef formDesc = (__bridge CMFormatDescriptionRef)[[track formatDescriptions] objectAtIndex:0];
     const AudioStreamBasicDescription* asbdPointer = CMAudioFormatDescriptionGetStreamBasicDescription(formDesc);
+//    CFRelease(formDesc);
     //because this is a pointer and not a struct we need to move the data into a struct so we can use it
     AudioStreamBasicDescription asbd = {0};
     memcpy(&asbd, asbdPointer, sizeof(asbd));

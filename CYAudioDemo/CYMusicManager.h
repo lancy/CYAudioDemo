@@ -1,5 +1,5 @@
 //
-//  CYiPodLibraryHelper.h
+//  CYMusicManager.h
 //  CYAudioDemo
 //
 //  Created by Lancy on 15/2/13.
@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface CYiPodLibraryHelper : NSObject
+@interface CYMusicManager : NSObject
 
-
++ (CYMusicManager *)shareManager;
+- (void)playMediaItem:(MPMediaItem *)mediaItem;
 
 
 @end

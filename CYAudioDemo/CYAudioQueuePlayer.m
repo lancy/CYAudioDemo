@@ -46,7 +46,6 @@ typedef enum
 }
 
 @property (nonatomic, strong) NSOperationQueue *operationQueue;
-
 @property (nonatomic, strong) NSMutableArray *packetsDatas;
 @property (assign) NSUInteger packetUsedIndex;
 
@@ -81,7 +80,6 @@ typedef enum
     
     
     _bufferByteSize = 2048;
-    NSLog(@"this is buffer byte size %lu", _bufferByteSize);
     int i;
     for (i = 0; i < kNumberPlaybackBuffers; ++i)
     {
@@ -129,12 +127,11 @@ typedef enum
     [self.operationQueue cancelAllOperations];
     self.packetUsedIndex = 0;
     [self.packetsDatas removeAllObjects];
-
-
 }
 
 - (void)disposeQueue
 {
+    self.packetsDatas = nil;
     AudioQueueDispose(_queue, TRUE);
 }
 

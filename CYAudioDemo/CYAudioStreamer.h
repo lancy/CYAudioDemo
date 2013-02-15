@@ -30,5 +30,6 @@
 - (id)initWithUrlAssert:(AVURLAsset *)urlAssert delegate:(id<CYAudioStreamerDelegate>)delegate;
 
 - (void)startStreaming;
+- (void)cancleStreaming;
 
 @end

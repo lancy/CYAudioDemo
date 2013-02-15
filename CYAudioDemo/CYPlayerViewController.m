@@ -27,7 +27,7 @@
 {
     [super viewDidLoad];
     
-    [self initNotification];
+//    [self initNotification];
     [self initAudioSessionManager];
     [self initStreamer];
     [self initQueuePlayer];
