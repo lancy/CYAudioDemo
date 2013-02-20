@@ -41,67 +41,68 @@
 }
 
 - (void)startStreaming
-{
-    
-    dispatch_queue_t streamingQueue =  dispatch_queue_create("StreamingQueue", nil);
-    dispatch_async(streamingQueue, ^{   
-        
-        CMSampleBufferRef sampleBuffer;
-        while ((sampleBuffer = [self.assertReaderOutput copyNextSampleBuffer])) {
-            
-            if (sampleBuffer) {
-                CMTime durationTime = CMSampleBufferGetDuration(sampleBuffer);
-                if (CMTimeGetSeconds(durationTime) == 0.0) {
+{    
+    dispatch_queue_t streamingQueue = dispatch_queue_create("com.lancy.streamingQueue", NULL);
+    dispatch_async(streamingQueue, ^{
+            while (self.assertReader.status == AVAssetReaderStatusReading)
+            {
+                CMSampleBufferRef sampleBuffer = [self.assertReaderOutput copyNextSampleBuffer];
+                if (sampleBuffer) {
+                    CMTime durationTime = CMSampleBufferGetDuration(sampleBuffer);
+                    if (CMTimeGetSeconds(durationTime) == 0.0) {
+                        break;
+                    }
+                    
+                    CMBlockBufferRef blockBuffer;
+                    AudioBufferList audioBufferList;
+                    CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer, NULL, &audioBufferList, sizeof(AudioBufferList), NULL, NULL, 0, &blockBuffer);
+                    CFRelease(blockBuffer);
+                    
+                    for (int i = 0; i < audioBufferList.mNumberBuffers; i++) {
+                        AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
+                        
+                        int mod = audioBuffer.mDataByteSize % PACKET_CAPACITY;
+                        int numberOfPacket;
+                        if (mod != 0) {
+                            numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY + 1;
+                        } else {
+                            numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY;
+                        }
+                        
+                        // AudioBufferのデータを格納しているポインタ
+                        void *audioBufferPointer = audioBuffer.mData;
+                        
+                        int remainedDataSize = audioBuffer.mDataByteSize;
+                        for (int i = 0; i < numberOfPacket; i++) {
+                            int sendDataSize;
+                            if (remainedDataSize < PACKET_CAPACITY) {
+                                sendDataSize = remainedDataSize;
+                            } else {
+                                sendDataSize = PACKET_CAPACITY;
+                            }
+                            
+                            NSData *data = [NSData dataWithBytes:audioBufferPointer length:sendDataSize];
+                            
+                            if ([self.delegate respondsToSelector:@selector(streamer:didGetPacketData:)]) {
+                                [self.delegate streamer:self didGetPacketData:data];
+                            }
+                            
+                            remainedDataSize -= sendDataSize;
+                            
+                            if (i < numberOfPacket - 1) {
+                                audioBufferPointer += PACKET_CAPACITY;
+                            }
+                        }
+                    }
+                } else {
+                    CFRelease(sampleBuffer);
                     break;
                 }
-                
-                CMBlockBufferRef blockBuffer;
-                AudioBufferList audioBufferList;
-                CMSampleBufferGetAudioBufferListWithRetainedBlockBuffer(sampleBuffer, NULL, &audioBufferList, sizeof(AudioBufferList), NULL, NULL, 0, &blockBuffer);
-                CFRelease(blockBuffer);
-                
-                for (int i = 0; i < audioBufferList.mNumberBuffers; i++) {
-                    AudioBuffer audioBuffer = audioBufferList.mBuffers[i];
-                    
-                    int mod = audioBuffer.mDataByteSize % PACKET_CAPACITY;
-                    int numberOfPacket;
-                    if (mod != 0) {
-                        numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY + 1;
-                    } else {
-                        numberOfPacket = audioBuffer.mDataByteSize / PACKET_CAPACITY;
-                    }
-                    
-                    // AudioBufferのデータを格納しているポインタ
-                    void *audioBufferPointer = audioBuffer.mData;
-                    
-                    int remainedDataSize = audioBuffer.mDataByteSize;
-                    for (int i = 0; i < numberOfPacket; i++) {
-                        int sendDataSize;
-                        if (remainedDataSize < PACKET_CAPACITY) {
-                            sendDataSize = remainedDataSize;
-                        } else {
-                            sendDataSize = PACKET_CAPACITY;
-                        }
-                        
-                        NSData *data = [NSData dataWithBytes:audioBufferPointer length:sendDataSize];
-                        
-                        if ([self.delegate respondsToSelector:@selector(streamer:didGetPacketData:)]) {
-                            [self.delegate streamer:self didGetPacketData:data];
-                        }
-                        
-                        remainedDataSize -= sendDataSize;
-                        
-                        if (i < numberOfPacket - 1) {
-                            audioBufferPointer += PACKET_CAPACITY;
-                        }
-                    }
-                }
-                CMSampleBufferInvalidate(sampleBuffer);
+//                CMSampleBufferInvalidate(sampleBuffer);
                 CFRelease(sampleBuffer);
-                sampleBuffer = NULL;
+//                sampleBuffer = NULL;
 
             }
-        }
         NSLog(@"Did finished streaming audio");
     });
     dispatch_release(streamingQueue);
@@ -109,7 +110,9 @@
 
 - (void)cancleStreaming
 {
-    [self.assertReader cancelReading];
+    if (self.assertReader.status == AVAssetReaderStatusReading) {
+        [self.assertReader cancelReading];
+    }
 }
 
 - (AudioStreamBasicDescription)getTrackNativeSettings:(AVAssetTrack *) track

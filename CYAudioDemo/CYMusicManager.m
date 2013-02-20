@@ -24,11 +24,12 @@
 
 + (CYMusicManager *)shareManager
 {
-    static CYMusicManager* shareManager;
-    if (!shareManager) {
-        shareManager = [[CYMusicManager alloc] init];
-    }
-    return shareManager;
+    static dispatch_once_t pred = 0;
+    __strong static id _sharedObject = nil;
+    dispatch_once(&pred, ^{
+        _sharedObject = [[self alloc] init]; // or some other init method
+    });
+    return _sharedObject;
 }
 
 - (id)init
@@ -74,8 +75,10 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CYMusicManagerDidChangedPlayingItem" object:mediaItem];
     if (self.audioQueuePlayer) {
         [self.audioQueuePlayer stopQueue];
+        [self.audioQueuePlayer setDelegate:nil];
     }
     if (self.audioStreamer) {
+        [self.audioStreamer setDelegate:nil];
         [self.audioStreamer cancleStreaming];
     }
     [self initStreamerWithMediaItem:mediaItem];
@@ -125,7 +128,7 @@
 
 - (void)player:(CYAudioQueuePlayer *)player didStopPlayingWithFinishedFlag:(BOOL)isFinishedPlaying
 {
-    NSLog(@"did stop playing with finished flag: %d", isFinishedPlaying);
+    NSLog(@"Did stop playing with finished flag: %d", isFinishedPlaying);
     if (isFinishedPlaying) {
         [self playNextMusic];
     }

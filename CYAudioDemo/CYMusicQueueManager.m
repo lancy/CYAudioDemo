@@ -29,7 +29,7 @@
 - (id)init
 {
     if (self = [super init]) {
-        self.musicQueue = [NSMutableArray array];
+        self.musicQueue = [[NSMutableArray alloc] init];
         self.currentPlayingIndex = 0;
     }
     return self;

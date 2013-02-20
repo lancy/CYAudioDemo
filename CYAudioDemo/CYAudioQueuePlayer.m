@@ -67,6 +67,7 @@ typedef enum
     
     self.operationQueue = [[NSOperationQueue alloc] init];
     [self.operationQueue setMaxConcurrentOperationCount:1];
+    [self.operationQueue addObserver:self forKeyPath:@"operations" options:0 context:NULL];
     
     AudioStreamBasicDescription asbd = audioStreamBasicDescription;
     
@@ -102,17 +103,8 @@ typedef enum
 
 - (void)startQueue;
 {
-    AudioQueueStart(_queue, NULL);
     _state = AS_PLAYING;
-    self.isFinishedPlaying = NO;
-    
-    [self.operationQueue addOperationWithBlock:^{
-        while (self.packetUsedIndex < [self.packetsDatas count]) {
-            [self enqueueBuffer];
-        }
-        self.isFinishedPlaying = YES;
-        [self stopQueue];
-    }];
+    AudioQueueStart(_queue, NULL);
 }
 
 
@@ -131,12 +123,28 @@ typedef enum
     [self.operationQueue cancelAllOperations];
     self.packetUsedIndex = 0;
     [self.packetsDatas removeAllObjects];
+    self.packetsDatas = nil;
 }
 
 - (void)disposeQueue
 {
-    self.packetsDatas = nil;
     AudioQueueDispose(_queue, TRUE);
+}
+
+
+#pragma mark - handle operation queue completed
+- (void) observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object
+                         change:(NSDictionary *)change context:(void *)context
+{
+    if (object == self.operationQueue && [keyPath isEqualToString:@"operations"]) {
+        if ([self.operationQueue.operations count] == 0) {
+            [self stopQueue];
+        }
+    }
+    else {
+        [super observeValueForKeyPath:keyPath ofObject:object
+                               change:change context:context];
+    }
 }
 
 
@@ -144,7 +152,15 @@ typedef enum
 
 - (void)handlePacketData:(NSData *)packetData
 {
-    [self.packetsDatas addObject:packetData];    
+    NSBlockOperation *appendDataOperation = [NSBlockOperation blockOperationWithBlock:^{
+        [self.packetsDatas addObject:packetData];
+    }];
+    NSBlockOperation *enqueueBufferOperation = [NSBlockOperation blockOperationWithBlock:^{
+            [self enqueueBuffer];
+    }];
+    [enqueueBufferOperation addDependency:appendDataOperation];
+    [self.operationQueue addOperation:appendDataOperation];
+    [self.operationQueue addOperation:enqueueBufferOperation];
 }
 
 - (void)enqueueBuffer
@@ -252,6 +268,11 @@ void audioQueueFinishedPlayingCallback (
 
 - (void)didStopPlaying
 {
+    if (self.operationQueue.operationCount == 0) {
+        self.isFinishedPlaying = YES;
+    } else {
+        self.isFinishedPlaying = NO;
+    }
     if ([self.delegate respondsToSelector:@selector(player:didStopPlayingWithFinishedFlag:)]) {
         [self.delegate player:self didStopPlayingWithFinishedFlag:self.isFinishedPlaying];
     }
