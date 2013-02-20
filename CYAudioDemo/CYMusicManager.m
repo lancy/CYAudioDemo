@@ -124,6 +124,12 @@
     }
 }
 
+- (void)streamerDidFinishedStreaming:(CYAudioStreamer *)streamer
+{
+    NSLog(@"Did Finished Streaming");
+    
+}
+
 #pragma mark - player deleagte
 
 - (void)player:(CYAudioQueuePlayer *)player didStopPlayingWithFinishedFlag:(BOOL)isFinishedPlaying

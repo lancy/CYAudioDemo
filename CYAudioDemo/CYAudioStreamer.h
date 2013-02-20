@@ -17,6 +17,7 @@
 @protocol CYAudioStreamerDelegate <NSObject>
 @optional
 - (void)streamer:(CYAudioStreamer *)streamer didGetPacketData:(NSData *)packetData;
+- (void)streamerDidFinishedStreaming:(CYAudioStreamer *)streamer;
 
 @end
 

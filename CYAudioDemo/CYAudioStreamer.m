@@ -103,10 +103,12 @@
 //                sampleBuffer = NULL;
 
             }
-        NSLog(@"Did finished streaming audio");
+        if ([self.delegate respondsToSelector:@selector(streamerDidFinishedStreaming:)]) {
+            [self.delegate streamerDidFinishedStreaming:self];
+        }
     });
-    dispatch_release(streamingQueue);
 }
+
 
 - (void)cancleStreaming
 {
